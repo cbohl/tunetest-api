@@ -50,15 +50,28 @@ const typeDefs = `
   type Query {
     allUsers: [User!]!
   }
-`;
 
-const resolvers = {
+  `;
+  
+  // type Mutation {
+  //   createSpecial(name: String!, email: String!): User!
+  // }
+
+  const resolvers = {
   Query: {
     allUsers: () => {
       return prisma.user.findMany();
     }
   }
 };
+// Mutation: {
+//   createSpecial: (parent: any, args: any) => {
+//     return prisma.user.create({
+//       email: "special@speciallly.com",
+//       name: "SuperSpecialName"
+//     });
+//   }
+// }
 
 const schema = makeExecutableSchema({
   resolvers,
@@ -82,7 +95,7 @@ app.use('/graphql', graphqlHTTP({
 // import express from 'express'
 app.get("/test", (req: Request, res: Response, next: NextFunction) => {
   
-  res.send("hi");
+  res.send("hi333");
 });
 
 app.get("/super", (req: Request, res: Response, next: NextFunction) => {
@@ -108,6 +121,12 @@ app.get('/users', async (req, res) => {
   // const posts = await prisma.post.findMany()
   // console.log(posts)
   // res.json(users)
+})
+app.get('/stellar', async (req, res) => {
+  const artists = await prisma.artist.findMany()
+  console.log("artists here", artists)
+  res.json(artists)
+  // res.send("testing!")
 })
 
 app.post('/post', async (req, res) => {

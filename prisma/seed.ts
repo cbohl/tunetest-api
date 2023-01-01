@@ -17,7 +17,34 @@ async function main() {
       name: 'Bob'
     },
   })
-  console.log({ alice, bob })
+
+  // const theBeatles = await prisma.artist.create({
+  //     data: {
+  //       "The",
+  //       "Beatles"
+  //     }
+  //   },
+  // )
+
+  const email = "234234@emailservice.com";
+  const name = "Will Mallti";
+  const post = await prisma.user.create({
+    data: {
+      email,
+      name
+    },
+  })
+
+  const firstName = "The"
+  const lastName = "Beatles"
+  const post33 = await prisma.artist.create({
+    data: {
+      firstName,
+      lastName
+    }
+  })
+  
+  console.log({ alice, bob, post, post33})
 }
 main()
   .then(async () => {
