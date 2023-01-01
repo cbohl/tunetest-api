@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import { Pool } from "pg";
 import { PrismaClient } from '@prisma/client';
 import { graphqlHTTP } from "express-graphql";
-import { buildSchema, BuildSchemaOptions } from "graphql";
+// import { buildSchema, BuildSchemaOptions } from "graphql";
+import { makeExecutableSchema } from "@graphql-tools/schema";
 
 const pool = new Pool({
   host: process.env.DB_HOST,
@@ -22,29 +23,59 @@ const connectToDB = async () => {
 };
 connectToDB();
 
-const schema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`);
+// const schema = buildSchema(`
+//   type Query {
+//     hello: String
+//   }
+// `);
 
 
-const root = {
-  hello: () => {
-    return 'Hello world!';
-  },
-};
+// const root = {
+//   hello: () => {
+//     return 'Hello world!';
+//   },
+// };
 
 const app = express();
 dotenv.config(); //Reads .env file and makes it accessible via process.env
 
 const prisma = new PrismaClient()
 
+const typeDefs = `
+  type User {
+    email: String!
+    name: String
+  }
+
+  type Query {
+    allUsers: [User!]!
+  }
+`;
+
+const resolvers = {
+  Query: {
+    allUsers: () => {
+      return prisma.user.findMany();
+    }
+  }
+};
+
+const schema = makeExecutableSchema({
+  resolvers,
+  typeDefs,
+});
+
 app.use('/graphql', graphqlHTTP({
   schema: schema,
-  rootValue: root,
-  graphiql: true,
+  graphiql: true
 }));
+
+
+// app.use('/graphql', graphqlHTTP({
+//   schema: schema,
+//   rootValue: root,
+//   graphiql: true,
+// }));
 
 
 
@@ -81,10 +112,12 @@ app.get('/users', async (req, res) => {
 
 app.post('/post', async (req, res) => {
   // const { title, content, authorEmail } = req.body
-  const email = "test@test.com"
+  const email = "test22@test22.com";
+  const name = "Maggie Johnson";
   const post = await prisma.user.create({
     data: {
       email,
+      name
     },
   })
   res.json(post)
@@ -125,3 +158,5 @@ app.post('/post', async (req, res) => {
 app.listen(process.env.PORT, () => {
   console.log(`Server is running at ${process.env.PORT}`);
 });
+
+// app.listen(4000)
