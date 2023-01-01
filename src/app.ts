@@ -1,7 +1,9 @@
 import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import { Pool } from "pg";
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
+import { graphqlHTTP } from "express-graphql";
+import { buildSchema, BuildSchemaOptions } from "graphql";
 
 const pool = new Pool({
   host: process.env.DB_HOST,
@@ -20,10 +22,31 @@ const connectToDB = async () => {
 };
 connectToDB();
 
+const schema = buildSchema(`
+  type Query {
+    hello: String
+  }
+`);
+
+
+const root = {
+  hello: () => {
+    return 'Hello world!';
+  },
+};
+
 const app = express();
 dotenv.config(); //Reads .env file and makes it accessible via process.env
 
 const prisma = new PrismaClient()
+
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  rootValue: root,
+  graphiql: true,
+}));
+
+
 
 // import express from 'express'
 app.get("/test", (req: Request, res: Response, next: NextFunction) => {

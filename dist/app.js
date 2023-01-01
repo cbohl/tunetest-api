@@ -16,6 +16,8 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const pg_1 = require("pg");
 const client_1 = require("@prisma/client");
+const express_graphql_1 = require("express-graphql");
+const graphql_1 = require("graphql");
 const pool = new pg_1.Pool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -32,9 +34,24 @@ const connectToDB = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 connectToDB();
+const schema = (0, graphql_1.buildSchema)(`
+  type Query {
+    hello: String
+  }
+`);
+const root = {
+    hello: () => {
+        return 'Hello world!';
+    },
+};
 const app = (0, express_1.default)();
 dotenv_1.default.config(); //Reads .env file and makes it accessible via process.env
 const prisma = new client_1.PrismaClient();
+app.use('/graphql', (0, express_graphql_1.graphqlHTTP)({
+    schema: schema,
+    rootValue: root,
+    graphiql: true,
+}));
 // import express from 'express'
 app.get("/test", (req, res, next) => {
     res.send("hi");
