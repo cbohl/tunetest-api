@@ -54,11 +54,28 @@ const typeDefs = `
     name: String
   }
 
-  type Query {
-    allUsers: [User!]!
+  type Artist {
+    firstName: String
+    lastName: String
+    songs: [Song]
   }
 
+  type Song {
+    title: String!
+    midiFilePath: String
+  }
+
+  type Query {
+    allUsers: [User!]!
+    allArtists: [Artist!]!
+    allSongs: [Song!]!
+  }
   `;
+// query superArtists: artists{
+//   songs {
+//     title
+//   }
+// }
 // type Mutation {
 //   createSpecial(name: String!, email: String!): User!
 // }
@@ -66,6 +83,14 @@ const resolvers = {
     Query: {
         allUsers: () => {
             return prisma.user.findMany();
+        },
+        allArtists: () => {
+            return prisma.artist.findMany({
+                include: { songs: true }
+            });
+        },
+        allSongs: () => {
+            return prisma.song.findMany();
         }
     }
 };
@@ -92,7 +117,7 @@ app.use('/graphql', (0, express_graphql_1.graphqlHTTP)({
 // }));
 // import express from 'express'
 app.get("/test", (req, res, next) => {
-    res.send("hi333");
+    res.send("hi333555");
 });
 app.get("/super", (req, res, next) => {
     // const test = await prisma.user.create({
@@ -114,10 +139,12 @@ app.get('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // res.json(users)
 }));
 app.get('/stellar', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const artists = yield prisma.artist.findMany();
+    const artists = yield prisma.artist.findMany({
+        include: { songs: true }
+    });
     const songs = yield prisma.song.findMany();
     console.log("artists here", artists);
-    res.json(songs);
+    res.json(artists);
     // res.send("testing!")
 }));
 app.post('/post', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
