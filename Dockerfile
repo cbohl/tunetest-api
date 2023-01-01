@@ -11,8 +11,17 @@ COPY ["package.json", "package-lock.json", "tsconfig.json", ".env", "./"]
 # Copies everything in the src directory to WORKDIR/src
 COPY ./src ./src
 
+# generated prisma files
+COPY prisma ./prisma/
+
+
+
 # Installs all packages
 RUN npm install
+
+RUN npx prisma generate
+
+# RUN npx prisma migrate dev
 
 # Runs the dev npm script to build & start the server
 CMD npm run dev
