@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import { Pool } from "pg";
+import { PrismaClient } from '@prisma/client'
 
 const pool = new Pool({
   host: process.env.DB_HOST,
@@ -22,14 +23,50 @@ connectToDB();
 const app = express();
 dotenv.config(); //Reads .env file and makes it accessible via process.env
 
+const prisma = new PrismaClient()
 
 // import express from 'express'
 app.get("/test", (req: Request, res: Response, next: NextFunction) => {
+  
   res.send("hi");
 });
-import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient()
+app.get("/super", (req: Request, res: Response, next: NextFunction) => {
+  
+
+  // const test = await prisma.user.create({
+  //   data: {email: 'testuser@testtest.com'}
+  // })
+  const cars = {"bmw": "super"};
+  res.json(cars);
+})
+
+// app.get("/users", (req: Request, res: Response, next: NextFunction) => {
+//   const users = await prisma.user.findMany({});
+//   res.json(users);
+// })
+
+app.get('/users', async (req, res) => {
+  const users = await prisma.user.findMany()
+  console.log("users here", users)
+  res.json(users)
+
+  // const posts = await prisma.post.findMany()
+  // console.log(posts)
+  // res.json(users)
+})
+
+app.post('/post', async (req, res) => {
+  // const { title, content, authorEmail } = req.body
+  const email = "test@test.com"
+  const post = await prisma.user.create({
+    data: {
+      email,
+    },
+  })
+  res.json(post)
+})
+
 // const app = express()
 
 // app.get('/feed', async (req, res) => {
@@ -40,18 +77,6 @@ const prisma = new PrismaClient()
 //   res.json(posts)
 // })
 
-// app.post('/post', async (req, res) => {
-//   const { title, content, authorEmail } = req.body
-//   const post = await prisma.post.create({
-//     data: {
-//       title,
-//       content,
-//       published: false,
-//       author: { connect: { email: authorEmail } },
-//     },
-//   })
-//   res.json(post)
-// })
 
 // app.put('/publish/:id', async (req, res) => {
 //   const { id } = req.params

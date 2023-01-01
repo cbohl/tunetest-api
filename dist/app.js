@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const pg_1 = require("pg");
+const client_1 = require("@prisma/client");
 const pool = new pg_1.Pool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -33,12 +34,40 @@ const connectToDB = () => __awaiter(void 0, void 0, void 0, function* () {
 connectToDB();
 const app = (0, express_1.default)();
 dotenv_1.default.config(); //Reads .env file and makes it accessible via process.env
+const prisma = new client_1.PrismaClient();
 // import express from 'express'
 app.get("/test", (req, res, next) => {
     res.send("hi");
 });
-const client_1 = require("@prisma/client");
-const prisma = new client_1.PrismaClient();
+app.get("/super", (req, res, next) => {
+    // const test = await prisma.user.create({
+    //   data: {email: 'testuser@testtest.com'}
+    // })
+    const cars = { "bmw": "super" };
+    res.json(cars);
+});
+// app.get("/users", (req: Request, res: Response, next: NextFunction) => {
+//   const users = await prisma.user.findMany({});
+//   res.json(users);
+// })
+app.get('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const users = yield prisma.user.findMany();
+    console.log("users here", users);
+    res.json(users);
+    // const posts = await prisma.post.findMany()
+    // console.log(posts)
+    // res.json(users)
+}));
+app.post('/post', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // const { title, content, authorEmail } = req.body
+    const email = "test@test.com";
+    const post = yield prisma.user.create({
+        data: {
+            email,
+        },
+    });
+    res.json(post);
+}));
 // const app = express()
 // app.get('/feed', async (req, res) => {
 //   const posts = await prisma.post.findMany({
@@ -46,18 +75,6 @@ const prisma = new client_1.PrismaClient();
 //     include: { author: true },
 //   })
 //   res.json(posts)
-// })
-// app.post('/post', async (req, res) => {
-//   const { title, content, authorEmail } = req.body
-//   const post = await prisma.post.create({
-//     data: {
-//       title,
-//       content,
-//       published: false,
-//       author: { connect: { email: authorEmail } },
-//     },
-//   })
-//   res.json(post)
 // })
 // app.put('/publish/:id', async (req, res) => {
 //   const { id } = req.params
