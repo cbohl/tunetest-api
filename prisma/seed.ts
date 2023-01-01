@@ -37,14 +37,26 @@ async function main() {
 
   const firstName = "The"
   const lastName = "Beatles"
-  const post33 = await prisma.artist.create({
+  const title = "Hey Jude"
+  const midiFilePath= "testPath"
+  const theBeatles = await prisma.artist.create({
     data: {
-      firstName,
-      lastName
+      firstName: "The",
+      lastName: "Beatles",
+      songs: {
+        create: [
+          { title: "Hey Jude", midiFilePath: "TestPath3532" }
+        ]
+      }
     }
   })
+
+  // const heyJude = await prisma.song.create({
+  //   data: {
+  //   }
+  // })
   
-  console.log({ alice, bob, post, post33})
+  console.log({ alice, bob, post, theBeatles})
 }
 main()
   .then(async () => {

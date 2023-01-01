@@ -92,7 +92,7 @@ app.use('/graphql', (0, express_graphql_1.graphqlHTTP)({
 // }));
 // import express from 'express'
 app.get("/test", (req, res, next) => {
-    res.send("hi");
+    res.send("hi333");
 });
 app.get("/super", (req, res, next) => {
     // const test = await prisma.user.create({
@@ -112,6 +112,13 @@ app.get('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // const posts = await prisma.post.findMany()
     // console.log(posts)
     // res.json(users)
+}));
+app.get('/stellar', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const artists = yield prisma.artist.findMany();
+    const songs = yield prisma.song.findMany();
+    console.log("artists here", artists);
+    res.json(songs);
+    // res.send("testing!")
 }));
 app.post('/post', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // const { title, content, authorEmail } = req.body

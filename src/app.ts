@@ -124,8 +124,9 @@ app.get('/users', async (req, res) => {
 })
 app.get('/stellar', async (req, res) => {
   const artists = await prisma.artist.findMany()
+  const songs = await prisma.song.findMany()
   console.log("artists here", artists)
-  res.json(artists)
+  res.json(songs)
   // res.send("testing!")
 })
 

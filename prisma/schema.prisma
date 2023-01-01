@@ -22,7 +22,16 @@ model Posts {
 }
 
 model Artist {
-  id    Int     @id @default(autoincrement())
-  firstName String?
-  lastName String
+  id          Int     @id @default(autoincrement())
+  firstName   String?
+  lastName    String
+  songs       Song[]       
+}
+
+model Song {
+  id             Int     @id @default(autoincrement())
+  artist         Artist @relation(fields: [artistId], references: [id])
+  artistId       Int
+  title          String
+  midiFilePath   String
 }
