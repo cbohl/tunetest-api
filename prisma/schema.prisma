@@ -20,3 +20,9 @@ model Posts {
   id Int @id @default(autoincrement())
   title String
 }
+
+model Artist {
+  id    Int     @id @default(autoincrement())
+  firstName String?
+  lastName String
+}
