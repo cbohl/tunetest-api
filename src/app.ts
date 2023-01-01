@@ -175,6 +175,9 @@ app.post('/post', async (req, res) => {
 
 // const server = app.listen(3000)
 
+app.use(express.static('public'))
+
+
 app.listen(process.env.PORT, () => {
   console.log(`Server is running at ${process.env.PORT}`);
 });
