@@ -19,6 +19,7 @@ const client_1 = require("@prisma/client");
 const express_graphql_1 = require("express-graphql");
 // import { buildSchema, BuildSchemaOptions } from "graphql";
 const schema_1 = require("@graphql-tools/schema");
+const cors_1 = __importDefault(require("cors"));
 const pool = new pg_1.Pool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -106,6 +107,7 @@ const schema = (0, schema_1.makeExecutableSchema)({
     resolvers,
     typeDefs,
 });
+app.use((0, cors_1.default)());
 app.use('/graphql', (0, express_graphql_1.graphqlHTTP)({
     schema: schema,
     graphiql: true

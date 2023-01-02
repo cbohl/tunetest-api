@@ -5,6 +5,7 @@ import { PrismaClient } from '@prisma/client';
 import { graphqlHTTP } from "express-graphql";
 // import { buildSchema, BuildSchemaOptions } from "graphql";
 import { makeExecutableSchema } from "@graphql-tools/schema";
+import cors from "cors"
 
 const pool = new Pool({
   host: process.env.DB_HOST,
@@ -104,6 +105,8 @@ const schema = makeExecutableSchema({
   resolvers,
   typeDefs,
 });
+
+app.use(cors())
 
 app.use('/graphql', graphqlHTTP({
   schema: schema,
