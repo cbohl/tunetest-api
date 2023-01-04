@@ -39,13 +39,42 @@ async function main() {
   const lastName = "Beatles"
   const title = "Hey Jude"
   const midiFilePath= "testPath"
+
   const theBeatles = await prisma.artist.create({
     data: {
       firstName: "The",
       lastName: "Beatles",
       songs: {
         create: [
-          { title: "Hey Jude", midiFilePath: "TestPath3532" }
+          { title: "Eight Days A Week", midiFilePath: "midi_songs/EightDaysAWeek.mid" },
+          { title: "With A Little Help From My Friends", midiFilePath: "midi_songs/WithALittleHelpFromMyFriends.mid" },
+          { title: "Hey Jude", midiFilePath: "midi_songs/HeyJude.mid" }
+        ]
+      }
+    }
+  })
+  const theBackstreetBoys = await prisma.artist.create({
+    data: {
+      firstName: "The",
+      lastName: "Backstreet Boys",
+      songs: {
+        create: [
+          { title: "I Want It That Way", midiFilePath: "midi_songs/IWantItThatWay.mid" },
+          { title: "Quit Playing Games With My Heart", midiFilePath: "midi_songs/QuitPlayingGamesWithMyHeart.mid" },
+          { title: "As Long As You Love Me", midiFilePath: "midi_songs/AsLongAsYouLoveMe.mid" },
+        ]
+      }
+    }
+  })
+  const easySongs = await prisma.artist.create({
+    data: {
+      firstName: "Easy",
+      lastName: "Songs",
+      songs: {
+        create: [
+          { title: "Twinkle Twinkle Little Star", midiFilePath: "midi_songs/TwinkleTwinkleLittleStar.mid" },
+          { title: "Fur Elise", midiFilePath: "midi_songs/FurElise.mid" },
+          { title: "Happy Birthday", midiFilePath: "midi_songs/HappyBirthday.mid" },
         ]
       }
     }
