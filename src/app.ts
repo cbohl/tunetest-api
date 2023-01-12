@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import { Pool } from "pg";
@@ -6,6 +8,7 @@ import { graphqlHTTP } from "express-graphql";
 // import { buildSchema, BuildSchemaOptions } from "graphql";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import cors from "cors"
+import createGraphQLLogger from 'graphql-log'
 
 const pool = new Pool({
   host: process.env.DB_HOST,
@@ -106,12 +109,35 @@ const schema = makeExecutableSchema({
   typeDefs,
 });
 
+// Create a logger
+const logExecutions = createGraphQLLogger();
+
+// Wrap your resolvers
+console.log('log executions', logExecutions(resolvers));
+
 app.use(cors())
 
 app.use('/graphql', graphqlHTTP({
   schema: schema,
-  graphiql: true
+  graphiql: true,
+  extensions({
+    result,
+  }) {
+    console.log(result.data);
+  },
+  // formatError: (err) => {
+    // return err.message
+  // }
 }));
+
+// app.use(function (req, res, next) {
+//   let originalSend = res.send;
+//   res.send = function (data) {
+//       console.log(data);
+//       originalSend.apply(res, Array.from(arguments));
+//   }
+//   next();
+// })
 
 
 // app.use('/graphql', graphqlHTTP({
