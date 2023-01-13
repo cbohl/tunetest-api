@@ -68,8 +68,8 @@ async function main() {
   })
   const easySongs = await prisma.artist.create({
     data: {
-      firstName: "Easy",
-      lastName: "Songs",
+      firstName: "The",
+      lastName: "Easy Songs",
       songs: {
         create: [
           { title: "Twinkle Twinkle Little Star", midiFilePath: "midi_songs/TwinkleTwinkleLittleStar.mid" },
