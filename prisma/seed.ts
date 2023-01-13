@@ -80,6 +80,14 @@ async function main() {
     }
   })
 
+  const score1 = await prisma.scoreRecord.create({
+    data: {
+      artistId: 1,
+      username: "Test Username",
+      score: 5
+    }
+  })
+
   // const heyJude = await prisma.song.create({
   //   data: {
   //   }

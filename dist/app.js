@@ -58,6 +58,7 @@ const typeDefs = `
   }
 
   type Artist {
+    id: Int
     firstName: String
     lastName: String
     songs: [Song]
@@ -68,10 +69,21 @@ const typeDefs = `
     midiFilePath: String
   }
 
+  type ScoreRecord {
+    artistId: Int
+    username: String
+    score: Int
+  }
+
   type Query {
     allUsers: [User!]!
     allArtists: [Artist!]!
     allSongs: [Song!]!
+    allScoreRecords: [ScoreRecord!]!
+  }
+
+  type Mutation {
+    createScoreRecord(artistId: Int, username: String, score: Int): ScoreRecord
   }
   `;
 // query superArtists: artists{
@@ -94,6 +106,28 @@ const resolvers = {
         },
         allSongs: () => {
             return prisma.song.findMany();
+        },
+        allScoreRecords: () => {
+            return prisma.scoreRecord.findMany();
+        }
+    },
+    Mutation: {
+        createScoreRecord: (_, args) => {
+            // const newScoreRecord = prisma.scoreRecord.create({
+            //     data: {
+            //       artistId: data.artistId,
+            //       username: data.username,
+            //       score: data.score
+            //     }
+            //   })
+            // }
+            return prisma.scoreRecord.create({
+                data: {
+                    artistId: args.artistId,
+                    username: args.username,
+                    score: args.score
+                }
+            });
         }
     }
 };
