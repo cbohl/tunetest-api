@@ -23,5 +23,7 @@ RUN npx prisma generate
 
 # RUN npx prisma migrate dev
 
+EXPOSE 8080
+
 # Runs the dev npm script to build & start the server
 CMD npm run dev
