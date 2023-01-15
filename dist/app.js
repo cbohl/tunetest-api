@@ -147,7 +147,11 @@ const schema = (0, schema_1.makeExecutableSchema)({
 const logExecutions = (0, graphql_log_1.default)();
 // Wrap your resolvers
 console.log('log executions', logExecutions(resolvers));
-app.use((0, cors_1.default)());
+// app.use(cors())
+app.use((0, cors_1.default)({
+    origin: '*'
+}));
+// origin: ['http://localhost:3000', 'https://transcendent-lolly-8e296f.netlify.app/' ]
 app.use('/graphql', (0, express_graphql_1.graphqlHTTP)({
     schema: schema,
     graphiql: true,

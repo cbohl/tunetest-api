@@ -150,7 +150,11 @@ const logExecutions = createGraphQLLogger();
 // Wrap your resolvers
 console.log('log executions', logExecutions(resolvers));
 
-app.use(cors())
+// app.use(cors())
+app.use(cors({
+  origin: '*'
+}));
+// origin: ['http://localhost:3000', 'https://transcendent-lolly-8e296f.netlify.app/' ]
 
 app.use('/graphql', graphqlHTTP({
   schema: schema,
