@@ -11,6 +11,9 @@ COPY ["package.json", "package-lock.json", "tsconfig.json", ".env", "./"]
 # Copies everything in the src directory to WORKDIR/src
 COPY ./src ./src
 
+# Attempt to copy public folder
+COPY ./public ./public
+
 # generated prisma files
 COPY prisma ./prisma/
 

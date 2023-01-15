@@ -272,7 +272,16 @@ app.post('/post', async (req, res) => {
 
 // const server = app.listen(3000)
 
-app.use(express.static('public'))
+// app.use(express.static('./public'))
+
+// app.use(express.static(path.join(__dirname, 'static')));
+app.use('/static', express.static('public'))
+
+// const path = require('path')
+// app.use('/static', express.static(path.join(__dirname, 'public')))
+
+// const path = require('path')
+// app.use('/static', express.static(path.join(__dirname, 'public')))
 
 
 app.listen(process.env.PORT, () => {
