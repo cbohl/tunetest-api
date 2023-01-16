@@ -75,6 +75,7 @@ const typeDefs = `
     allArtists: [Artist!]!
     allSongs: [Song!]!
     allScoreRecords: [ScoreRecord!]!
+    getArtistScoreRecords(artistId: Int): [ScoreRecord!] !
   }
 
   type Mutation {
@@ -108,6 +109,13 @@ const typeDefs = `
     },
     allScoreRecords: () => {
       return prisma.scoreRecord.findMany();
+    },
+    getArtistScoreRecords: (_, args) => {
+      return prisma.scoreRecord.findMany({
+        where: {
+          artistId: args.artistId
+        }
+      })
     }
   },
   Mutation: {
