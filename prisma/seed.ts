@@ -1,45 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 async function main() {
-  const alice = await prisma.user.upsert({
-    where: { email: 'alice@prisma.io' },
-    update: {},
-    create: {
-      email: 'alice@prisma.io',
-      name: 'Alice'
-    },
-  })
-  const bob = await prisma.user.upsert({
-    where: { email: 'bob@prisma.io' },
-    update: {},
-    create: {
-      email: 'bob@prisma.io',
-      name: 'Bob'
-    },
-  })
-
-  // const theBeatles = await prisma.artist.create({
-  //     data: {
-  //       "The",
-  //       "Beatles"
-  //     }
-  //   },
-  // )
-
-  const email = "234234@emailservice.com";
-  const name = "Will Mallti";
-  const post = await prisma.user.create({
-    data: {
-      email,
-      name
-    },
-  })
-
-  const firstName = "The"
-  const lastName = "Beatles"
-  const title = "Hey Jude"
-  const midiFilePath= "testPath"
-
   const theBeatles = await prisma.artist.create({
     data: {
       firstName: "The",
@@ -83,17 +44,25 @@ async function main() {
   const score1 = await prisma.scoreRecord.create({
     data: {
       artistId: 1,
-      username: "Test Username",
-      score: 5
+      username: "Phil",
+      score: 2
     }
   })
-
-  // const heyJude = await prisma.song.create({
-  //   data: {
-  //   }
-  // })
-  
-  console.log({ alice, bob, post, theBeatles})
+  const score2 = await prisma.scoreRecord.create({
+    data: {
+      artistId: 2,
+      username: "Jacqueline",
+      score: 2
+    }
+  })  
+  const score3 = await prisma.scoreRecord.create({
+    data: {
+      artistId: 3,
+      username: "Steve",
+      score: 1
+    }
+  })
+  console.log({ theBeatles, theBackstreetBoys, easySongs, score1, score2, score3})
 }
 main()
   .then(async () => {
