@@ -26,7 +26,7 @@ const pool = new pg_1.Pool({
     user: process.env.DB_USER,
     database: process.env.DB_NAME,
     password: process.env.DB_PASSWORD,
-    port: parseInt(process.env.DB_PORT || "5432")
+    port: parseInt(process.env.DB_PORT || "5432"),
 });
 const connectToDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -69,6 +69,7 @@ const typeDefs = `
     allArtists: [Artist!]!
     allSongs: [Song!]!
     allScoreRecords: [ScoreRecord!]!
+    getArtistInfo(id: Int): Artist!
     getArtistScoreRecords(artistId: Int): [ScoreRecord!] !
   }
 
@@ -83,7 +84,7 @@ const resolvers = {
         },
         allArtists: () => {
             return prisma.artist.findMany({
-                include: { songs: true }
+                include: { songs: true },
             });
         },
         allSongs: () => {
@@ -92,13 +93,21 @@ const resolvers = {
         allScoreRecords: () => {
             return prisma.scoreRecord.findMany();
         },
+        getArtistInfo: (_, args) => {
+            return prisma.artist.findUnique({
+                where: {
+                    id: args.id,
+                },
+                include: { songs: true },
+            });
+        },
         getArtistScoreRecords: (_, args) => {
             return prisma.scoreRecord.findMany({
                 where: {
-                    artistId: args.artistId
-                }
+                    artistId: args.artistId,
+                },
             });
-        }
+        },
     },
     Mutation: {
         createScoreRecord: (_, args) => {
@@ -106,11 +115,11 @@ const resolvers = {
                 data: {
                     artistId: args.artistId,
                     username: args.username,
-                    score: args.score
-                }
+                    score: args.score,
+                },
             });
-        }
-    }
+        },
+    },
 };
 const schema = (0, schema_1.makeExecutableSchema)({
     resolvers,
@@ -118,19 +127,18 @@ const schema = (0, schema_1.makeExecutableSchema)({
 });
 const logExecutions = (0, graphql_log_1.default)();
 app.use((0, cors_1.default)({
-    origin: '*'
+    origin: "*",
 }));
 // origin: ['http://localhost:3000', 'https://transcendent-lolly-8e296f.netlify.app/' ]
-app.use('/graphql', (0, express_graphql_1.graphqlHTTP)({
+app.use("/graphql", (0, express_graphql_1.graphqlHTTP)({
     schema: schema,
     graphiql: true,
-    extensions({ result, }) {
-    },
+    extensions({ result }) { },
 }));
 app.get("/test", (req, res, next) => {
     res.send("Test route");
 });
-app.use('/static', express_1.default.static('public'));
+app.use("/static", express_1.default.static("public"));
 app.listen(process.env.PORT, () => {
     console.log(`Server is running at ${process.env.PORT}`);
 });

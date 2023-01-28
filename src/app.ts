@@ -8,6 +8,7 @@ import { graphqlHTTP } from "express-graphql";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import cors from "cors";
 import createGraphQLLogger from "graphql-log";
+import { isAsteriskToken } from "typescript";
 
 const pool = new Pool({
   host: process.env.DB_HOST,
