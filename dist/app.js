@@ -1,5 +1,4 @@
 "use strict";
-// @ts-nocheck
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -41,11 +40,6 @@ const app = (0, express_1.default)();
 dotenv_1.default.config(); //Reads .env file and makes it accessible via process.env
 const prisma = new client_1.PrismaClient();
 const typeDefs = `
-  type User {
-    email: String!
-    name: String
-  }
-
   type Artist {
     id: Int
     firstName: String
@@ -65,7 +59,6 @@ const typeDefs = `
   }
 
   type Query {
-    allUsers: [User!]!
     allArtists: [Artist!]!
     allSongs: [Song!]!
     allScoreRecords: [ScoreRecord!]!
@@ -79,9 +72,6 @@ const typeDefs = `
   `;
 const resolvers = {
     Query: {
-        allUsers: () => {
-            return prisma.user.findMany();
-        },
         allArtists: () => {
             return prisma.artist.findMany({
                 include: { songs: true },
@@ -133,7 +123,7 @@ app.use((0, cors_1.default)({
 app.use("/graphql", (0, express_graphql_1.graphqlHTTP)({
     schema: schema,
     graphiql: true,
-    extensions({ result }) { },
+    // extensions({ result }) {},
 }));
 app.get("/test", (req, res, next) => {
     res.send("Test route");

@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import { Pool } from "pg";
@@ -8,7 +6,6 @@ import { graphqlHTTP } from "express-graphql";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import cors from "cors";
 import createGraphQLLogger from "graphql-log";
-import { isAsteriskToken } from "typescript";
 
 const pool = new Pool({
   host: process.env.DB_HOST,
@@ -33,11 +30,6 @@ dotenv.config(); //Reads .env file and makes it accessible via process.env
 const prisma = new PrismaClient();
 
 const typeDefs = `
-  type User {
-    email: String!
-    name: String
-  }
-
   type Artist {
     id: Int
     firstName: String
@@ -57,7 +49,6 @@ const typeDefs = `
   }
 
   type Query {
-    allUsers: [User!]!
     allArtists: [Artist!]!
     allSongs: [Song!]!
     allScoreRecords: [ScoreRecord!]!
@@ -72,9 +63,6 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    allUsers: () => {
-      return prisma.user.findMany();
-    },
     allArtists: () => {
       return prisma.artist.findMany({
         include: { songs: true },
@@ -86,7 +74,7 @@ const resolvers = {
     allScoreRecords: () => {
       return prisma.scoreRecord.findMany();
     },
-    getArtistInfo: (_, args) => {
+    getArtistInfo: (_: any, args: any) => {
       return prisma.artist.findUnique({
         where: {
           id: args.id,
@@ -94,7 +82,7 @@ const resolvers = {
         include: { songs: true },
       });
     },
-    getArtistScoreRecords: (_, args) => {
+    getArtistScoreRecords: (_: any, args: any) => {
       return prisma.scoreRecord.findMany({
         where: {
           artistId: args.artistId,
@@ -103,7 +91,7 @@ const resolvers = {
     },
   },
   Mutation: {
-    createScoreRecord: (_, args) => {
+    createScoreRecord: (_: any, args: any) => {
       return prisma.scoreRecord.create({
         data: {
           artistId: args.artistId,
@@ -134,7 +122,7 @@ app.use(
   graphqlHTTP({
     schema: schema,
     graphiql: true,
-    extensions({ result }) {},
+    // extensions({ result }) {},
   })
 );
 
