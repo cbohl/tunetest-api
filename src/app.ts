@@ -74,7 +74,7 @@ const resolvers = {
     allScoreRecords: () => {
       return prisma.scoreRecord.findMany();
     },
-    getArtistInfo: (_: any, args: any) => {
+    getArtistInfo: (_: undefined, args: { id: number }) => {
       return prisma.artist.findUnique({
         where: {
           id: args.id,
@@ -82,7 +82,7 @@ const resolvers = {
         include: { songs: true },
       });
     },
-    getArtistScoreRecords: (_: any, args: any) => {
+    getArtistScoreRecords: (_: undefined, args: { artistId: number }) => {
       return prisma.scoreRecord.findMany({
         where: {
           artistId: args.artistId,
@@ -91,7 +91,10 @@ const resolvers = {
     },
   },
   Mutation: {
-    createScoreRecord: (_: any, args: any) => {
+    createScoreRecord: (
+      _: undefined,
+      args: { artistId: number; username: string; score: number }
+    ) => {
       return prisma.scoreRecord.create({
         data: {
           artistId: args.artistId,
