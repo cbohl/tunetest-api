@@ -19,7 +19,8 @@ const client_1 = require("@prisma/client");
 const express_graphql_1 = require("express-graphql");
 const schema_1 = require("@graphql-tools/schema");
 const cors_1 = __importDefault(require("cors"));
-const graphql_log_1 = __importDefault(require("graphql-log"));
+// import createGraphQLLogger from "graphql-log";
+// const x = 5;
 const pool = new pg_1.Pool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -115,7 +116,7 @@ const schema = (0, schema_1.makeExecutableSchema)({
     resolvers,
     typeDefs,
 });
-const logExecutions = (0, graphql_log_1.default)();
+// const logExecutions = createGraphQLLogger();
 app.use((0, cors_1.default)({
     origin: "*",
 }));
@@ -125,7 +126,7 @@ app.use("/graphql", (0, express_graphql_1.graphqlHTTP)({
     graphiql: true,
     // extensions({ result }) {},
 }));
-app.get("/test", (req, res, next) => {
+app.get("/test", (req, res) => {
     res.send("Test route");
 });
 app.use("/static", express_1.default.static("public"));

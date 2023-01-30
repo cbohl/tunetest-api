@@ -1,11 +1,13 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import { Pool } from "pg";
 import { PrismaClient } from "@prisma/client";
 import { graphqlHTTP } from "express-graphql";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import cors from "cors";
-import createGraphQLLogger from "graphql-log";
+// import createGraphQLLogger from "graphql-log";
+
+// const x = 5;
 
 const pool = new Pool({
   host: process.env.DB_HOST,
@@ -111,7 +113,7 @@ const schema = makeExecutableSchema({
   typeDefs,
 });
 
-const logExecutions = createGraphQLLogger();
+// const logExecutions = createGraphQLLogger();
 
 app.use(
   cors({
@@ -129,7 +131,7 @@ app.use(
   })
 );
 
-app.get("/test", (req: Request, res: Response, next: NextFunction) => {
+app.get("/test", (req: Request, res: Response) => {
   res.send("Test route");
 });
 
